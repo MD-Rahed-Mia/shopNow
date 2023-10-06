@@ -44,16 +44,22 @@ const featureProducts = async (pageN) => {
           <button class="fa_cart"><i class="fa-solid fa-cart-shopping"></i></button>
         </div>
     `;
-
-    if (index >= prevRange && index < currRange ) {
-      featureItems.innerHTML += data;
-    }
-
     if (currRange > data1.length) {
       featureItems.innerHTML = `
         <h1>NO more products</h1>
       `
       nextBtn.disabled = true;
+      pageN = 1;
+      previousBtn.disabled = false;
+    }
+    if (pageN < 1) {
+      previousBtn.disabled = true;
+      nextBtn.disabled = false;
+    }
+
+
+    if (index >= prevRange && index < currRange ) {
+      featureItems.innerHTML += data;
     }
 
   })
@@ -95,9 +101,7 @@ previousBtn.addEventListener("click", () => {
   pageN--;
   featureProducts(pageN);
 
-  if (pageN <= 1) {
-    previousBtn.disabled = true;
-  }
+  
 })
 
 window.addEventListener("load", () => {
