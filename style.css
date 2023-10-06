@@ -360,3 +360,23 @@
   outline: none;
   cursor: pointer;
 }
+
+/* arrival pagination goes here  */
+
+.arrival_pagination {
+  margin-top: 2rem;
+  width: 100%;
+  display: flex;
+  gap: 1rem;justify-content: center;
+}
+
+.arrival_pagination button {
+  padding: 0.8rem 2rem;
+  background: var(--text-color);
+  color: white;
+  font-weight: bolder;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  border-radius: 5px;
+}

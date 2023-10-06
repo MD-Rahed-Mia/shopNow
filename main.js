@@ -114,9 +114,14 @@ previousBtn.addEventListener("click", () => {
 // new arrival products goes here 
 let arrivalContainer = document.querySelector(".new_arrival_container");
 
+let arrivalPagi = document.querySelector(".arrival_pagination")
 
-function setNewArrival(data) {
+
+function setNewArrival(data, pr, cr) {
+
   let data1 = '';
+
+  arrivalContainer.innerHTML = '';
 
   data.map((e, i) => {
     let div = document.createElement("div");
@@ -129,7 +134,7 @@ function setNewArrival(data) {
         </div>
     `;
 
-    if (i > 0 && i < 9) {
+    if (i > pr && i <= cr) {
 
       arrivalContainer.appendChild(div);
     }
@@ -143,12 +148,46 @@ function setNewArrival(data) {
 }
 
 
-function arrivalProducts() {
+function arrivalProducts(pn) {
+
+  let cp = pn;
+  let pr = (cp-1) * 20;
+  let cr = pr + 20;
+
+
   fetch("https://api.escuelajs.co/api/v1/products")
     .then(res => res.json())
     .then(data => {
-      setNewArrival(data)
+      setNewArrival(data, pr, cr);
+      localStorage.setItem("newArrival", JSON.stringify(data));
     })
+}
+
+
+//set button in the new arrival page
+
+let tcount;
+let npp = 20;
+
+function setBtn(ind) {
+  let button = document.createElement("button");
+  button.innerHTML = ind;
+  arrivalPagi.appendChild(button);
+}
+
+function setArrivalBtn() {
+  let totalItem = localStorage.getItem('newArrival');
+  let totalItemGet = JSON.parse(totalItem);
+
+  tcount = Math.ceil(totalItemGet.length / npp);
+
+
+  for (let index = 1; index <= tcount; index++) {
+    
+    setBtn(index);
+    
+  }
+  console.log(tcount);
 }
 
 
@@ -158,7 +197,18 @@ function arrivalProducts() {
 
 window.addEventListener("load", () => {
   featureProducts(1);
+  arrivalProducts(1);
+  setArrivalBtn();
 
-  arrivalProducts();
+  let arbtn = document.querySelectorAll(".arrival_pagination button");
+
+  arbtn.forEach((e, i) => {
+    e.addEventListener("click", () => {
+      let vl = e.textContent;
+      arrivalProducts(vl)
+    })
+  })
+
+
 })
 
