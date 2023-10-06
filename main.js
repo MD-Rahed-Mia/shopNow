@@ -57,8 +57,9 @@ const featureProducts = async (pageN) => {
       nextBtn.disabled = false;
     }
 
+    // display data on the webpage 
 
-    if (index >= prevRange && index < currRange ) {
+    if (index >= prevRange && index < currRange) {
       featureItems.innerHTML += data;
     }
 
@@ -84,27 +85,80 @@ function generatePgBtn() {
 
   totalItem = 30;
   totalBtn = Math.ceil(totalItem / pp);
-  
+
   for (let index = 1; index <= totalBtn; index++) {
     createBt(index);
   }
 }
 
 
-  nextBtn.addEventListener("click", () => {
+// add event on next button
 
-      pageN++;
-      featureProducts(pageN);
-  })
+nextBtn.addEventListener("click", () => {
+
+  pageN++;
+  featureProducts(pageN);
+})
+
+//add event on previos button
+
 previousBtn.addEventListener("click", () => {
 
   pageN--;
   featureProducts(pageN);
 
-  
+
 })
+
+
+// new arrival products goes here 
+let arrivalContainer = document.querySelector(".new_arrival_container");
+
+
+function setNewArrival(data) {
+  let data1 = '';
+
+  data.map((e, i) => {
+    let div = document.createElement("div");
+    div.innerHTML = `
+      <div class="new_arrival_card">
+      <img src="${e.images[0]}">
+          <p>${e.title}</p>
+          <p class="nac_title">${e.price}</p>
+          <button class="nac_button">Buy Now!</button>
+        </div>
+    `;
+
+    if (i > 0 && i < 9) {
+
+      arrivalContainer.appendChild(div);
+    }
+
+  });
+
+
+  console.log(arrivalContainer);
+  console.log(data);
+
+}
+
+
+function arrivalProducts() {
+  fetch("https://api.escuelajs.co/api/v1/products")
+    .then(res => res.json())
+    .then(data => {
+      setNewArrival(data)
+    })
+}
+
+
+
+//call api when load in done
+
 
 window.addEventListener("load", () => {
   featureProducts(1);
+
+  arrivalProducts();
 })
 
